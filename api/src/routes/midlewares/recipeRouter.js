@@ -1,5 +1,5 @@
 const { Recipe, Diet } = require("../../db.js");
-const { getAllRecipes, getDbById, getApiById } = require("../controllers/controllers");
+const { getAllRecipes, getDbById, getApiById } = require("../controllers/recipesControllers");
 const recipeRouter = require("express").Router();
 
 recipeRouter.get('/', async (req, res) => {
@@ -61,5 +61,6 @@ recipeRouter.post('/', async (req, res) => {
       res.status(404).send(error.message);
   }
 });
+
 
 module.exports = recipeRouter;

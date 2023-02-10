@@ -1,4 +1,4 @@
-const { dietTypesDb } = require("../controllers/dietType");
+const { dietTypesDb } = require("../controllers/dietsControllers");
 const { Diet } = require("../../db.js");
 const dietRouter = require("express").Router();
 

@@ -1,11 +1,12 @@
 const axios = require("axios");
 require("dotenv").config();
 const { API_KEY } = process.env;
-const { Recipe, Diet } = require("../../db.js");
+const { Recipe, Diet,DishType } = require("../../db.js");
 const { Op } = require("sequelize");
 
 //`https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true&number=100&query=${name}`
 
+// Por name
 const getApiRecipes = async (name) => {
   const urlApi = await axios.get(
     `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true&number=100`
@@ -19,12 +20,7 @@ const getApiRecipes = async (name) => {
       image: recipe.image,
       diets: recipe.diets,
       dishTypes: recipe.dishTypes,
-      steps: recipe.analyzedInstructions[0]?.steps.map((e) => {
-        return {
-          number: e.number,
-          step: e.step,
-        };
-      }),
+      steps: recipe.analyzedInstructions[0]?.steps.map(e =>e.number+") "+ e.step).join(" "),
     };
   });
   return infoApi.filter((recipe) =>
@@ -39,7 +35,14 @@ const getDbRecipes = async (name) => {
         [Op.iLike]: `%${name}%`,
       },
     },
-    include: [{ model: Diet, attributes: ['name'] }],
+    include: [
+      { model: Diet, attributes: ['name'],through: {
+        atributes: [],
+    } },
+      { model: DishType, attributes: ['name'],through: {
+        atributes: [],
+    } }
+    ],
   });
 };
 
@@ -49,22 +52,26 @@ const getAllRecipes = async (name) => {
   return apiInfo.concat(dbInfo);
 };
 
-// por id
 
-//`https://api.spoonacular.com/recipes/${id}/information?=apiKey=${API_KEY}`
+
+
+// Por id
+
+
 const getApiById = async (id) => {
     return await axios.get (`https://api.spoonacular.com/recipes/${id}/information?apiKey=${API_KEY}`)
 }
 
 const getDbById = async (id) => {
     return await Recipe.findByPk(id, {
-        include: {
-            model: Diet,
-            atributes: ['name'],
-            through: {
-                atributes: [],
-            }
-        }
+      include: [
+        { model: Diet, attributes: ['name'],through: {
+          atributes: [],
+      } },
+        { model: DishType, attributes: ['name'],through: {
+          atributes: [],
+      } }
+      ]
     });
 }
 

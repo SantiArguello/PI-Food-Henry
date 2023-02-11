@@ -36,7 +36,7 @@ recipeRouter.get('/:id', async (req, res, next) => {
                   healthScore: apiRecipesById.data.healthScore,
                   image:apiRecipesById.data.image,
                     dishTypes: apiRecipesById.data.dishTypes,
-                    dietTypes: apiRecipesById.data.diets,
+                    diets: apiRecipesById.data.diets,
                     steps: apiRecipesById.data.analyzedInstructions[0]?.steps.map(e =>e.number+") "+ e.step).join(" ")
                 }
                  res.status(200).send(recipeDetails); 
@@ -52,25 +52,37 @@ recipeRouter.post('/', async (req, res) => {
   try {
     const { name, summary, healthScore, steps, image, diets, dishTypes } = req.body;
 
-    //Se crea la receta
+    //Crear la receta
     const newRecipe = await Recipe.create({ name, summary, healthScore, steps, image });
 
-    // Se divide el string en un array, se separa por comas, se eliminan los espacios y se crea la dieta
+    // Crear las dietas
     const dietsArray = diets.split(',').map(diet => diet.trim());
-    const dietCreate = await Diet.bulkCreate(// BulkCreate permite mandar un array con múltiples registros en la base de datos de una sola vez 
+    const dietCreate = await Diet.bulkCreate(
       dietsArray.map(diet => ({ name: diet }))
     );
 
+    // Crear los tipos de plato
     const dishTypesArray = dishTypes.split(',').map(dishType => dishType.trim());
     const dishTypeCreate = await DishType.bulkCreate(
       dishTypesArray.map(dishType => ({ name: dishType }))
     );
 
-    //Se establecen las relaciones N:N
+    // Establecer las relaciones N:N
     await newRecipe.setDiets(dietCreate);
     await newRecipe.setDishTypes(dishTypeCreate);
 
-    res.status(200).send({ recipe: newRecipe, diets: dietCreate, dishTypes: dishTypeCreate });
+    const result = {
+      id: newRecipe.id,
+      name: newRecipe.name,
+      summary: newRecipe.summary,
+      healthScore: newRecipe.healthScore,
+      image: newRecipe.image,
+      diets: dietsArray,
+      dishTypes: dishTypesArray,
+      steps: newRecipe.steps
+    };
+
+    res.status(200).send([result]);
   } catch (error) {
     res.status(404).send({ error: error.message });
   }

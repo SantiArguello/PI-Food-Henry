@@ -29,7 +29,7 @@ const getApiRecipes = async (name) => {
 };
 
 const getDbRecipes = async (name) => {
-  return await Recipe.findAll({
+  const recipes = await Recipe.findAll({
     where: {
       name: {
         [Op.iLike]: `%${name}%`,
@@ -37,12 +37,20 @@ const getDbRecipes = async (name) => {
     },
     include: [
       { model: Diet, attributes: ['name'],through: {
-        atributes: [],
-    } },
+        attributes: [],
+      } },
       { model: DishType, attributes: ['name'],through: {
-        atributes: [],
-    } }
-    ],
+        attributes: [],
+      } },
+    ]
+  });
+ 
+  return recipes.map(recipe => {
+    return {
+      ...recipe.dataValues,
+      diets: recipe.diets.map(diet => diet.name),
+      DishTypes: recipe.DishTypes.map(dishType => dishType.name),
+    };
   });
 };
 
@@ -53,26 +61,27 @@ const getAllRecipes = async (name) => {
 };
 
 
-
-
 // Por id
-
-
 const getApiById = async (id) => {
     return await axios.get (`https://api.spoonacular.com/recipes/${id}/information?apiKey=${API_KEY}`)
 }
 
 const getDbById = async (id) => {
-    return await Recipe.findByPk(id, {
-      include: [
-        { model: Diet, attributes: ['name'],through: {
-          atributes: [],
-      } },
-        { model: DishType, attributes: ['name'],through: {
-          atributes: [],
-      } }
-      ]
-    });
-}
+  const recipe = await Recipe.findByPk(id, {
+    include: [
+      { model: Diet, attributes: ['name'],through: {
+        attributes: [],
+    } },
+      { model: DishType, attributes: ['name'],through: {
+        attributes: [],
+    } }
+    ]
+  });
+   return {
+    ...recipe.dataValues,
+    diets: recipe.diets.map(diet => diet.name),
+    DishTypes: recipe.DishTypes.map(dishType => dishType.name),
+  };
+};
 
 module.exports = { getApiById,getDbById,getApiRecipes, getDbRecipes, getAllRecipes };

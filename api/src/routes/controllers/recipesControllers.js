@@ -7,18 +7,39 @@ const { Op } = require("sequelize");
 //`https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true&number=100&query=${name}`
 
 // Por name
+
+
+const getApiAllRecipes = async () => {
+  const urlApi = await axios.get(
+    `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true&number=100`
+  );
+  const infoApi = urlApi.data.results.map((recipe) => {
+    const diets = recipe.diets.length > 0 ? recipe.diets : ["Ninguna"];
+    return {
+      id: recipe.id,
+      name: recipe.title,
+      healthScore: recipe.healthScore,
+      image: recipe.image,
+      diets: diets,
+    };
+  });
+  return infoApi
+};
+
+
 const getApiRecipes = async (name) => {
   const urlApi = await axios.get(
     `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true&number=100`
   );
   const infoApi = urlApi.data.results.map((recipe) => {
+    const diets = recipe.diets.length > 0 ? recipe.diets : ["Ninguna"];
     return {
       id: recipe.id,
       name: recipe.title,
       summary: recipe.summary,
       healthScore: recipe.healthScore,
       image: recipe.image,
-      diets: recipe.diets,
+      diets: diets,
       dishTypes: recipe.dishTypes,
       steps: recipe.analyzedInstructions[0]?.steps.map(e =>e.number+") "+ e.step).join(" "),
     };
@@ -61,6 +82,7 @@ const getAllRecipes = async (name) => {
 };
 
 
+
 // Por id
 const getApiById = async (id) => {
     return await axios.get (`https://api.spoonacular.com/recipes/${id}/information?apiKey=${API_KEY}`)
@@ -84,4 +106,4 @@ const getDbById = async (id) => {
   };
 };
 
-module.exports = { getApiById,getDbById,getApiRecipes, getDbRecipes, getAllRecipes };
+module.exports = { getApiById,getDbById,getApiRecipes, getDbRecipes, getAllRecipes, getApiAllRecipes };

@@ -1,7 +1,21 @@
 const { Recipe,Diet,DishType } = require("../../db.js");
-const { getAllRecipes, getDbById, getApiById } = require("../controllers/recipesControllers");
+const { getAllRecipes, getDbById, getApiById,getApiRecipes,getDbRecipes, getApiAllRecipes } = require("../controllers/recipesControllers");
 const recipeRouter = require("express").Router();
 
+
+recipeRouter.get("/", async (req, res) => {
+  
+  try {
+    const name = req.query.name;
+    const allRecipes = await getApiAllRecipes();
+    return res.status(200).json(allRecipes);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
+
+//por Query
 recipeRouter.get('/', async (req, res) => {
   try {
     const name = req.query.name;
@@ -20,7 +34,8 @@ recipeRouter.get('/', async (req, res) => {
   }
 });
 
-recipeRouter.get('/:id', async (req, res, next) => {    
+//por Id
+recipeRouter.get('/:id', async (req, res) => {    
     const { id } = req.params  
     try {
         if (/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(id)) {
@@ -47,7 +62,7 @@ recipeRouter.get('/:id', async (req, res, next) => {
     }
 });
 
-
+// Ruta Post
 recipeRouter.post('/', async (req, res) => {
   try {
     const { name, summary, healthScore, steps, image, diets, dishTypes } = req.body;

@@ -1,105 +1,44 @@
-const { Recipe,Diet,DishType } = require("../../db.js");
-const { getAllRecipes, getDbById, getApiById,getApiRecipes,getDbRecipes, getApiAllRecipes } = require("../controllers/recipesControllers");
-const recipeRouter = require("express").Router();
+const router = require("express").Router();
+const { Recipe, Diets } = require("../../db.js");
+const { rece, getByID, postRecipe } = require("../controllers/recipesControllers");
 
-
-recipeRouter.get("/", async (req, res) => {
-  
+///GET que acepta un parámetro opcional de consulta "name" y devuelve todas las recetas o una receta específica si se proporciona el parámetro de consulta.
+router.get("/", async (req, res) => {
+  const { name } = req.query;
   try {
-    const name = req.query.name;
-    const allRecipes = await getApiAllRecipes();
-    return res.status(200).json(allRecipes);
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
+    if (name) {
+      const devolver = await rece(name);
+      res.status(200).json(devolver);
+    } else {
+      const todas = await rece();
+      res.status(200).json(todas);
+    }
+  } catch (err) {
+    res.status(400).send(err);
   }
 });
 
-
-//por Query
-recipeRouter.get('/', async (req, res) => {
+///POST que acepta un cuerpo de solicitud y crea una nueva receta en la base de datos.
+router.post("/", async (req, res) => {
   try {
-    const name = req.query.name;
-    if (!name) {
-      return res.status(400).json({ message: 'Name parameter is required' });
-    }
-    const allRecipes = await getAllRecipes(name);
-    if (allRecipes.length === 0) {
-      return res
-        .status(404)
-        .json({ message: 'No recipes were found with the given name' });
-    }
-    return res.status(200).json(allRecipes);
+    const objRecipe = req.body;
+    if (!objRecipe) res.status(404).send("Missing info");
+    const newRecipe = await postRecipe(objRecipe);
+
+    res.status(201).send(newRecipe);
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    res.status(404).send(error);
   }
 });
 
-//por Id
-recipeRouter.get('/:id', async (req, res) => {    
-    const { id } = req.params  
-    try {
-        if (/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(id)) {
-            let dbRecipesById = await getDbById(id);            
-             res.status(200).json(dbRecipesById)
-        } else { 
-            apiRecipesById = await getApiById(id)
-            if (apiRecipesById.data.id) {
-                let recipeDetails =  {                    
-                  image: apiRecipesById.data.image,
-                  name: apiRecipesById.data.title,
-                  summary: apiRecipesById.data.summary,
-                  healthScore: apiRecipesById.data.healthScore,
-                  image:apiRecipesById.data.image,
-                    dishTypes: apiRecipesById.data.dishTypes,
-                    diets: apiRecipesById.data.diets,
-                    steps: apiRecipesById.data.analyzedInstructions[0]?.steps.map(e =>e.number+") "+ e.step).join(" ")
-                }
-                 res.status(200).send(recipeDetails); 
-            }
-        } 
-    } catch {
-         res.status(404).send('Recipe not found')
-    }
-});
-
-// Ruta Post
-recipeRouter.post('/', async (req, res) => {
+/// GET que acepta un parámetro de ruta "idReceta" y devuelve una receta específica de la base de datos por su ID.
+router.get("/:idReceta", async (req, res) => {
+  const { idReceta } = req.params;
   try {
-    const { name, summary, healthScore, steps, image, diets, dishTypes } = req.body;
-
-    //Crear la receta
-    const newRecipe = await Recipe.create({ name, summary, healthScore, steps, image });
-
-    // Crear las dietas
-    const dietsArray = diets.split(',').map(diet => diet.trim());
-    const dietCreate = await Diet.bulkCreate(
-      dietsArray.map(diet => ({ name: diet }))
-    );
-
-    // Crear los tipos de plato
-    const dishTypesArray = dishTypes.split(',').map(dishType => dishType.trim());
-    const dishTypeCreate = await DishType.bulkCreate(
-      dishTypesArray.map(dishType => ({ name: dishType }))
-    );
-
-    // Establecer las relaciones N:N
-    await newRecipe.setDiets(dietCreate);
-    await newRecipe.setDishTypes(dishTypeCreate);
-
-    const result = {
-      id: newRecipe.id,
-      name: newRecipe.name,
-      summary: newRecipe.summary,
-      healthScore: newRecipe.healthScore,
-      image: newRecipe.image,
-      diets: dietsArray,
-      dishTypes: dishTypesArray,
-      steps: newRecipe.steps
-    };
-
-    res.status(200).send([result]);
-  } catch (error) {
-    res.status(404).send({ error: error.message });
+    const IdRec = await getByID(idReceta);
+    res.status(200).json(IdRec);
+  } catch (err) {
+    res.status(400).send(err);
   }
 });
 
@@ -116,4 +55,4 @@ recipeRouter.post('/', async (req, res) => {
 
 */
 
-module.exports = recipeRouter;
+module.exports = router;

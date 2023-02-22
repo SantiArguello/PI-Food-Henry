@@ -1,21 +1,14 @@
-const { dietTypesDb } = require("../controllers/dietsControllers");
-const { Diet } = require("../../db.js");
-const dietRouter = require("express").Router();
+const { createDiet } = require("../controllers/dietsControllers");
+const router = require("express").Router();
 
 
-dietRouter.get('/', async (req, res, next) => {
-    
-    try {
-        dietTypesDb.forEach(e => {
-            Diet.findOrCreate({
-                where: { name: e}
-            })
-        });
-        const dietTypes = await Diet.findAll();
-        res.send(dietTypes)
-    } catch (error) {
-        next(error)
-    }
-})
-
-module.exports = dietRouter;
+///GET trae todas las dietas
+router.get("/", async (req, res) => {
+  try {
+    const allDiets = await createDiet();
+    res.status(200).send(allDiets);
+  } catch (error) {
+    res.status(404).send(error);
+  }
+});
+module.exports = router;

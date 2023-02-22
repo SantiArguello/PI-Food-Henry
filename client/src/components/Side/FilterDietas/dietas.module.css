@@ -1,0 +1,17 @@
+.dietsContainer{
+  display: flex;
+}
+
+
+.checkbox {
+    display: inline-block;
+    margin-right: 10px;
+   
+  }
+  
+  /* Estilos para las etiquetas */
+  .label {
+    display: inline-block;
+    margin-right: 10px;
+    font-size: 20px;
+  }

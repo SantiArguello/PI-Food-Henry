@@ -1,5 +1,25 @@
-const dietTypesDb = ['gluten free', 'ketogenic', 'vegetarian', 'lacto vegetarian','ovo vegetarian', 'lacto ovo vegetarian', 'vegan', 'pescetarian', 'paleolithic', 'primal', 'low fodmap', 'whole 30', 'dairy free'];
+const { Diets } = require("../../db");
 
-module.exports = {
-    dietTypesDb
-}
+const createDiet = async () => {
+  const dietTypes = [
+    "gluten free",
+    "ketogenic",
+    "lacto ovo vegetarian",
+    "vegan",
+    "pescatarian",
+    "paleolithic",
+    "primal",
+    "fodmap friendly",
+    "whole 30",
+    "dairy free",
+  ];
+  dietTypes.forEach((d) => {
+    Diets.findOrCreate({
+      where: {
+        name: d,
+      },
+    });
+  });
+  return Diets.findAll();
+};
+module.exports = { createDiet };

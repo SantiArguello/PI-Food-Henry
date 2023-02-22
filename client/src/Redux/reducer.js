@@ -5,13 +5,10 @@ export const FILTER_DIETS = "FILTER_DIETS";
 export const ORDER_BY_LETTER = "ORDER_BY_LETTER";
 export const CHANGE_PAGE = "CHANGE_PAGE";
 export const HEALTH_SCORE = "HEALTH_SCORE";
-
 export const RECIPE_ID = "RECIPE_ID";
 export const CLEARID = "CLEARID";
 export const SET_PAGES = "SET_PAGES";
-export const DELETE_RECIPE = "DELETE_RECIPE";
 export const BURGER = "BURGER";
-
 export const FILTER_CREATED = "FILTER_CREATED";
 
 const initialState = {
@@ -34,14 +31,14 @@ function rootReducer(state = initialState, action) {
         recipeCopy: action.payload,
         searchRecipe: action.payload,
       };
-    ////////////////////////////////////////////////////////////////////////////
+    
     case SEARCH_NAME:
       return {
         ...state,
         recipes: action.payload,
         currentPage: 1,
       };
-    ////////////////////////////////////////////////////////////////////////////
+   
 
     case GET_DIETS:
       return {
@@ -61,7 +58,7 @@ function rootReducer(state = initialState, action) {
         recipes: [...action.payload],
       };
 
-    ///////////////////////La función localeCompare() se utiliza para comparar dos strings en JavaScript y devuelve un valor numérico que indica si el string que se está comparando es mayor (-1), menor (1) o igual (0) al string con el que se está comparando. En este caso, estamos utilizando el valor de retorno de localeCompare() para determinar el orden en el que deben aparecer los elementos en la lista.////////////////////////////////
+    //La función localeCompare() se utiliza para comparar dos strings en JavaScript y devuelve un valor numérico que indica si el string que se está comparando es mayor (-1), menor (1) o igual (0) al string con el que se está comparando. En este caso, estamos utilizando el valor de retorno de localeCompare() para determinar el orden en el que deben aparecer los elementos en la lista.////////////////////////////////
 
     case ORDER_BY_LETTER:
       const allRecipe = [...state.recipes];
@@ -78,8 +75,6 @@ function rootReducer(state = initialState, action) {
         currentPage: 2,
       };
 
-    ////////////////////////////////////////////////////////////////////////////
-
     case HEALTH_SCORE:
       let allRecipes = [...state.recipes]; // hacer una copia del array de recetas
       let orderByHs; // Declarar una variable para almacenar la array ordenada
@@ -95,32 +90,7 @@ function rootReducer(state = initialState, action) {
         recipes: orderByHs, //actualice la array de recetas con la array ordenada
         currentPage: 2, // actualice a la pagina 2
       };
-    ////////////////////////////////////////////////////////////////////////////
-
-    //  copyRecipes para restaurar el estado original de recipes cuando se seleccione "api" en el filtro, en lugar de usar filtRecipes. Algo así:
-
-    // case FILTER_CREATED:
-    //   const copyRecipes = state.recipeCopy;
-    //   let filtRecipes = state.recipes;
-
-    //   console.log(filtRecipes);
-    //   let createdFiltered =
-    //     action.payload === "api"
-    //       ? copyRecipes
-    //       : action.payload === "database"
-    //       ? filtRecipes.filter((el) => el.id.length > 6)
-    //       : filtRecipes.filter((el) => el.id.toString().length < 6);
-    //   if (!createdFiltered.length) {
-    //     alert("No recipes created yet");
-    //     createdFiltered = filtRecipes;
-    //   }
-    //   return {
-    //     ...state,
-    //     recipes: createdFiltered,
-    //     currentPage: 2,
-    //   };
-
-    ///////////////////////////////////////////////////////////////////////
+    
 
     case CHANGE_PAGE:
       return {
@@ -128,39 +98,20 @@ function rootReducer(state = initialState, action) {
         currentPage: action.payload,
       };
 
-    ////////////este es del paginado nuevo!!///////////////////////////////
+   //este es del paginado nuevo!!
     case SET_PAGES: {
       return {
         ...state,
         currentPage: action.payload,
       };
     }
-    ////////////////////////////////////////////////////////////////////
-
-    /////////////////////////////////////////////////////////////////////
+  
     case RECIPE_ID:
       return {
         ...state,
         recipeId: action.payload,
       };
-    /////////////////////////////////////////////////////////////////////
-    case CLEARID:
-      return {
-        ...state,
-        recipeId: [],
-      };
-    /////////////////////////////////////////////////////////////////////
-
-    case DELETE_RECIPE:
-      return {
-        ...state,
-        recipeCopy: state.recipeCopy.filter((r) => r !== action.payload),
-      };
-
-    //////////////////////////////////////////////////////
-
-    /////////////////////////////////////////////////////
-
+   
     default:
       return { ...state };
   }

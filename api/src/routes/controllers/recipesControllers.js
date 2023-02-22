@@ -1,109 +1,148 @@
 const axios = require("axios");
+const { Recipe, Diets } = require("../../db.js");
 require("dotenv").config();
 const { API_KEY } = process.env;
-const { Recipe, Diet,DishType } = require("../../db.js");
-const { Op } = require("sequelize");
 
-//`https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true&number=100&query=${name}`
-
-// Por name
+//`https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true&number=100`
+//`https://api.spoonacular.com/recipes/${id}/information?apiKey=${API_KEY}`
 
 
-const getApiAllRecipes = async () => {
-  const urlApi = await axios.get(
-    `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true&number=100`
-  );
-  const infoApi = urlApi.data.results.map((recipe) => {
-    const diets = recipe.diets.length > 0 ? recipe.diets : ["Ninguna"];
-    return {
-      id: recipe.id,
-      name: recipe.title,
-      healthScore: recipe.healthScore,
-      image: recipe.image,
-      diets: diets,
-    };
-  });
-  return infoApi
+// consulta a la api
+const searchAPI = async () => {
+  try {
+    const apiUrl = await axios.get(
+      `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true&number=100`
+    );
+    const apiInfo = await apiUrl.data.results?.map((ele) => {
+      return {
+        id: ele.id,
+        name: ele.title,
+        summary: ele.summary,
+        healthScore: ele.healthScore,
+        image: ele.image,
+        dishTypes: ele.dishTypes,
+        diets: ele.diets?.map((element) => element),
+        steps: ele.analyzedInstructions[0]?.steps
+          .map((ele) => `${ele.number}) ${ele.step}`)
+          .join(""),
+      };
+    });
+    return apiInfo;
+  } catch (error) {
+    console.log("ERROR: ", error);
+  }
 };
 
+//DB DATA
 
-const getApiRecipes = async (name) => {
-  const urlApi = await axios.get(
-    `https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true&number=100`
-  );
-  const infoApi = urlApi.data.results.map((recipe) => {
-    const diets = recipe.diets.length > 0 ? recipe.diets : ["Ninguna"];
-    return {
-      id: recipe.id,
-      name: recipe.title,
-      summary: recipe.summary,
-      healthScore: recipe.healthScore,
-      image: recipe.image,
-      diets: diets,
-      dishTypes: recipe.dishTypes,
-      steps: recipe.analyzedInstructions[0]?.steps.map(e =>e.number+") "+ e.step).join(" "),
-    };
-  });
-  return infoApi.filter((recipe) =>
-    recipe.name.toLowerCase().includes(name.toLowerCase())
-  );
-};
-
-const getDbRecipes = async (name) => {
-  const recipes = await Recipe.findAll({
-    where: {
-      name: {
-        [Op.iLike]: `%${name}%`,
+//Traigo de la Base de Datos toda la info que necesito.
+const searchDb = async () => {
+  try {
+    const buscarDB = await Recipe.findAll({
+      include: {
+        model: Diets,
+        attributes: ["name"],
+        //throught si esta relacionado en la relacion de los dos modelos muchos  a muchos
+        through: {
+          attributes: [],
+        },
       },
-    },
-    include: [
-      { model: Diet, attributes: ['name'],through: {
-        attributes: [],
-      } },
-      { model: DishType, attributes: ['name'],through: {
-        attributes: [],
-      } },
-    ]
-  });
- 
-  return recipes.map(recipe => {
-    return {
-      ...recipe.dataValues,
-      diets: recipe.diets.map(diet => diet.name),
-      DishTypes: recipe.DishTypes.map(dishType => dishType.name),
+    });
+    let obj = await buscarDB?.map((element) => {
+      return {
+        id: element.id,
+        name: element.name,
+        summary: element.summary,
+        healthScore: element.healthScore,
+        image: element.image,
+        steps: element.steps,
+        diets: element.diets?.map((diet) => diet.name),
+      };
+    });
+    return obj;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+//junto las dos funciones contatenado los resultados!!!
+const getAll = async () => {
+  try {
+    const objApi = await searchAPI();
+    const objBase = await searchDb();
+    const allApiDb = await objApi.concat(objBase);
+    // console.log(allApiDb)
+    return allApiDb;
+  } catch (error) {
+    return error;
+  }
+};
+
+// acepta un objeto de receta como argumento y crea una nueva entrada en la base de datos con esa información. También agrega información sobre dietas relacionadas a la receta.
+
+const postRecipe = async (objRecipe) => {
+  try {
+    const { name, summary, healthScore, steps, image, diets } = objRecipe;
+    const recipe = {
+      name,
+      summary,
+      healthScore,
+      steps,
+      image,
     };
-  });
+
+    const dietInfo = await Diets.findAll({
+      where: {
+        name: diets,
+      },
+    });
+    const createRecipe = await Recipe.create(recipe);
+
+    createRecipe.addDiets(dietInfo);
+
+    return Recipe.findAll();
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-const getAllRecipes = async (name) => {
-  const apiInfo = await getApiRecipes(name);
-  const dbInfo = await getDbRecipes(name);
-  return apiInfo.concat(dbInfo);
+// acepta un parámetro opcional de "name" uso getAll traigo todas las recetas y busco si conside ese name con alguno
+
+const rece = async (name) => {
+  try {
+    if (name) {
+      const buscareceta = await getAll();
+      const resultado = await buscareceta.filter(
+        (ele) => ele.name.toLowerCase().includes(name.toLowerCase()) === true
+      );
+      if (resultado.length) return resultado;
+    } else {
+      const todas = await getAll();
+
+      return todas;
+    }
+
+    throw "No tenemos datos sobre esta receta";
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//buscar receta por ID
+const getByID = async (idReceta) => {
+  try {
+    const buscareceta = await getAll();
+    const receta = buscareceta.find((ele) => ele.id == idReceta);
+    if (receta) {
+      return receta;
+    } else {
+      throw "Ups, no tenemos una receta con ese id";
+    }
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 
 
-// Por id
-const getApiById = async (id) => {
-    return await axios.get (`https://api.spoonacular.com/recipes/${id}/information?apiKey=${API_KEY}`)
-}
-
-const getDbById = async (id) => {
-  const recipe = await Recipe.findByPk(id, {
-    include: [
-      { model: Diet, attributes: ['name'],through: {
-        attributes: [],
-    } },
-      { model: DishType, attributes: ['name'],through: {
-        attributes: [],
-    } }
-    ]
-  });
-   return {
-    ...recipe.dataValues,
-    diets: recipe.diets.map(diet => diet.name),
-    DishTypes: recipe.DishTypes.map(dishType => dishType.name),
-  };
-};
-
-module.exports = { getApiById,getDbById,getApiRecipes, getDbRecipes, getAllRecipes, getApiAllRecipes };
+module.exports = { rece, getAll, getByID, postRecipe };

@@ -1,4 +1,3 @@
-
 import axios from "axios";
 import {
   GET_RECIPES,
@@ -12,34 +11,33 @@ import {
   CLEARID,
   SET_PAGES,
   FILTER_CREATED,
-  DELETE_RECIPE,
   BURGER,
 } from "./reducer";
 
 export const getRecipes = () => {
   return async (dispatch) => {
-    let pedidoApi = await axios.get(`/recipes`);
+    let pedidoApi = await axios.get(`http://localhost:3001/recipes`);
     dispatch({ type: GET_RECIPES, payload: pedidoApi.data });
   };
 };
 
 export const searchName = (name) => {
   return async (dispatch) => {
-    let pedidoApi = await axios.get(`/recipes/?name=${name}`);
+    let pedidoApi = await axios.get(`http://localhost:3001/recipes?name=${name}`);
     dispatch({ type: SEARCH_NAME, payload: pedidoApi.data });
   };
 };
 
 export const getDiets = () => {
   return async (dispatch) => {
-    let pedidoApi = await axios.get(`/diets`);
+    let pedidoApi = await axios.get(`http://localhost:3001/diets`);
     dispatch({ type: GET_DIETS, payload: pedidoApi.data });
   };
 };
 
 export const RecipeID = (id) => {
   return async (dispatch) => {
-    let receta = await axios.get(`/recipes/${id}`);
+    let receta = await axios.get(`http://localhost:3001/recipes/${id}`);
     return dispatch({ type: RECIPE_ID, payload: receta.data });
   };
 };
@@ -86,7 +84,7 @@ export const Burger = (payload) => {
 
 export const postRecipes = (payload) => {
   return async function () {
-    const postRecipe = await axios.post("/recipes", payload);
+    const postRecipe = await axios.post("http://localhost:3001/recipes", payload);
     return postRecipe;
   };
 };
@@ -104,32 +102,4 @@ export const filterCreated = (payload) => {
   };
 };
 
-///////////////////////////////////////////////////////
 
-export const deleteRecipe = (id) => {
-  return async function (dispatch) {
-    const selectRecipe = await axios.delete("/recipes/" + id);
-    return dispatch({
-      type: DELETE_RECIPE,
-      payload: selectRecipe,
-    });
-  };
-};
-
-/////////////////////////////////////////////////////
-
-// export const updateRecipe = (id, payload) => {
-//   return async function (dispatch) {
-//     await axios.put("http://localhost:3001/recipes/" + id, payload);
-//     return dispatch({
-//       type: UPDATE_RECIPE,
-//     });
-//   };
-// };
-
-export const update = (id, payload) => {
-  return async function () {
-    const UPDATE = await axios.put("/recipes/" + id, payload);
-    return UPDATE;
-  };
-};

@@ -1,0 +1,41 @@
+.navContainer{
+display: flex;
+justify-content: center;
+align-items: center;
+gap: 3rem;
+  padding: 0.5rem;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 0.5rem;
+}
+
+
+.titleSort{
+  font-size: 2rem;
+  color: white;
+  text-align: center;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+  padding: 0.5rem;
+  
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.selectNav {
+    font-size: 1.3rem;
+    color: white;
+    background-color:#4caf50;
+    border: none;
+    border-radius: 0.5rem;
+    border-bottom: 2px solid rgb(19, 1, 1);
+    margin: 1rem;
+    padding: 0.6rem;
+  }
+  
+  .selectNav option {
+    color: white;
+    background-color: rgba(0, 0, 0, 0.666);
+  }

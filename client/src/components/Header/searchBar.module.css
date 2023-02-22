@@ -1,0 +1,29 @@
+.searchbar{
+  display: flex;
+  align-items: center;
+}
+.inputSearch{
+  min-height: 50px;
+  max-width: 150px;
+  padding: 0 1rem;
+  color: #eef3ee;
+  font-size: 15px;
+  border: 1px solid #4caf50;
+  border-radius: 6px 0 0 6px;
+  background-color: rgba(238, 221, 221, 0.19);
+}
+.inputSearch::placeholder{
+  color: white;
+}
+.buttonSearch{
+  background-color: #4caf50;
+  color: white;
+  min-height: 50px;
+  padding: 0 1rem;
+  font-size: 15px;
+  border: none;
+  border-radius: 0 6px 6px 0;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  margin-bottom: 40px;
+}

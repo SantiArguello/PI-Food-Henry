@@ -1,0 +1,101 @@
+.formContainer {
+    background-image: url("https://static.vecteezy.com/system/resources/previews/001/259/184/large_2x/old-wood-wall-texture-background-free-photo.jpg");
+    min-height: 100vh;
+    
+    
+  }
+  .mainForm{
+    background-color: rgba(0, 0, 0, 0.546);
+    
+    
+  }
+  
+  
+  .formContainer label {
+    font-size: 1.3rem;
+    color: white;
+    margin-left: 20px;
+    
+    
+  }
+  
+  .formContainer input,
+  .formContainer textarea {
+    padding: 0.5rem;
+    margin: 0.5rem;
+    border-radius: 0.5rem;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 1rem;
+    width: 100%;
+  }
+  
+  .formContainer input:focus,
+  .formContainer textarea:focus {
+    outline: none;
+  }
+  
+  .formContainer button[type="submit"] {
+    background-color: #4caf50;
+    border: none;
+    border-radius: 0.5rem;
+    margin: 1rem 0;
+    padding: 0.6rem;
+    font-size: 1.3rem;
+    color: white;
+    cursor: pointer;
+  }
+  .buttonBack{
+    background-color: #4caf50;
+    border: none;
+    border-radius: 0.5rem;
+    margin: 1rem 0;
+    padding: 0.6rem;
+    font-size: 1.3rem;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .formContainer button[type="submit"]:hover {
+    background-color: #388e3c;
+  }
+  
+  .formContainer span {
+    color: red;
+    font-size: 0.9rem;
+    margin-left: 0.5rem;
+    
+  }
+  
+  .formContainer div {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  
+  .formContainer input[type="checkbox"] {
+    margin-right: 0.5rem;
+    transform: scale(1.5);
+  }
+  input::placeholder, textarea::placeholder {
+    color: white;
+  }
+  .formContainer select {
+    font-size: 1.3rem;
+    color: white;
+    background-color: #4caf50;
+    border: none;
+    border-radius: 0.5rem;
+    border-bottom: 2px solid rgb(19, 1, 1);
+    margin: 1rem;
+    padding: 0.6rem;
+  }
+  
+  .formContainer select option {
+    color: white;
+    background-color: rgba(0, 0, 0, 0.666);
+  }

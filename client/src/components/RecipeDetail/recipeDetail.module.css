@@ -1,0 +1,135 @@
+.containerDetail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  background-image: url("https://static.vecteezy.com/system/resources/previews/001/259/184/large_2x/old-wood-wall-texture-background-free-photo.jpg");
+  min-height: 100vh;
+  border-radius: 0.5rem;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
+}
+
+.mainDetail{
+    background-color: rgba(0, 0, 0, 0.839);
+    border-radius: 30px;
+}
+.backButton {
+  margin-bottom: 1.5rem;
+}
+
+.backButton button {
+  font-size: 1.2rem;
+  color: #fff;
+  background-color: #4caf50;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.backButton button:hover {
+  background-color: #3e8e41;
+}
+
+.titleDetail {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  text-align: center;
+  margin-top: 5rem;
+  text-shadow: 2px 2px 5px rgb(3, 0, 0);
+  color: white;
+}
+
+.healthScore {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 9px;
+  color: white;
+}
+
+.healthScore h4 {
+  font-size: 2.3rem;
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
+
+.healthScore h3 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #4caf50;
+
+}
+
+.summary {
+    font-size: 1.4rem;
+    color: white;
+    margin: 2rem;
+}
+
+.summary h4 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.summary p {
+  font-size: 20px;
+  
+  text-align: justify;
+}
+
+.summary img {
+  max-width: 100%;
+  margin-top: 2rem;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.diets {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.diets h4 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-right: 1rem;
+  color: white;
+}
+
+.diets h3 {
+    display: flex;
+    font-size: 1.2rem;
+    color: #666;
+    background-color: #eee;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+    align-items: center;
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.steps h4 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: white;
+}
+
+.steps p {
+    font-size: 1.4rem;
+    color: white;
+    margin: 2rem;
+}

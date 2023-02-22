@@ -1,0 +1,32 @@
+/* Estilos para el contenedor principal */
+.container {
+  display: flex;
+  justify-content: center;
+  margin-top: 5rem;
+  margin-bottom: 5rem;
+  align-items: center;
+}
+
+/* Estilos para los botones de paginación */
+.pageButton {
+  font-size: 1.2rem;
+  color: #fff;
+  background-color: #4caf50;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 0 0.5rem;
+}
+
+.pageButton:hover {
+  background-color: #3e8e41;
+}
+
+/* Estilos para el texto de página actual */
+.currentPage {
+  font-size: 1.2rem;
+  margin: 0 1rem;
+  color: white;
+}

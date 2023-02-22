@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import * as actions from "../../redux/actions";
 import { useEffect, useState } from "react";
+import s from "./pagination.module.css"
 
 
 export default function Pagination({ totalPages }) {
@@ -28,23 +29,25 @@ export default function Pagination({ totalPages }) {
 
   return (
     <div >
-      <div >
-        <button  disabled={page === 1} onClick={prevPage}>
-          Prev
-        </button>
-       
-        <p>
-          {page} to {totalPages}
-        </p>
-
-        <button
-         
-          disabled={input === totalPages}
-          onClick={nextPage}
-        >
-          Next
-        </button>
-      </div>
+      <div className={s.container}>
+      <button
+        className={s.pageButton}
+        disabled={page === 1}
+        onClick={prevPage}
+      >
+        Prev
+      </button>
+      <p className={s.currentPage}>
+        {page} to {totalPages}
+      </p>
+      <button
+        className={s.pageButton}
+        disabled={page === totalPages}
+        onClick={nextPage}
+      >
+        Next
+      </button>
+    </div>
     </div>
   );
 }

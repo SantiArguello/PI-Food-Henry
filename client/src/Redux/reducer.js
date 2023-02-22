@@ -46,11 +46,7 @@ function rootReducer(state = initialState, action) {
         dietas: action.payload,
       };
 
-    case BURGER:
-      return {
-        ...state, // combina el estado actual con el nuevo objeto
-        hamburguer: action.payload,
-      };
+   
 
     case FILTER_DIETS:
       return {

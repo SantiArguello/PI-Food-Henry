@@ -5,6 +5,7 @@ import * as actions from "../../redux/actions";
 import { useHistory } from "react-router-dom";
 import validate from "./validate";
 import { Link } from "react-router-dom";
+import s from "./createRecipe.module.css"
 
 
 
@@ -98,15 +99,16 @@ export const CreateRecipe = (props) => {
   };
 
   return (
-    <div >
-      <div>
+    <div className={s.formContainer}>
+      <div className={s.mainForm}>
         <Link  to="/home">
-          <button >Back to home</button>
+          <button className={s.buttonBack}  >Back to home</button>
         </Link>
 
         <form  onSubmit={(e) => handleSubmit(e)}>
           <div >
             <label>Name:</label>
+            {errorInput.name ? <span>{errorInput.name}</span> : <span></span>}
 
             <input
               type="text"
@@ -115,8 +117,12 @@ export const CreateRecipe = (props) => {
               value={input.name}
               onChange={(e) => handleChange(e)}
             />
-            {errorInput.name ? <span>{errorInput.name}</span> : <span></span>}
             <label>Description:</label>
+            {errorInput.summary ? (
+              <span>{errorInput.summary}</span>
+            ) : (
+              <span></span>
+            )}
 
             <textarea
               type="text"
@@ -125,13 +131,13 @@ export const CreateRecipe = (props) => {
               value={input.summary}
               onChange={(e) => handleChange(e)}
             />
-            {errorInput.summary ? (
-              <span>{errorInput.summary}</span>
+
+            <label>HealthScore</label>
+            {errorInput.healthScore ? (
+              <span>{errorInput.healthScore}</span>
             ) : (
               <span></span>
             )}
-
-            <label>HealthScore</label>
             <input
               type="number"
               name="healthScore"
@@ -139,12 +145,8 @@ export const CreateRecipe = (props) => {
               value={input.healthScore}
               onChange={(e) => handleChange(e)}
             />
-            {errorInput.healthScore ? (
-              <span>{errorInput.healthScore}</span>
-            ) : (
-              <span></span>
-            )}
             <label>Imagen:</label>
+            {errorInput.image ? <span>{errorInput.image}</span> : <span></span>}
             <input
               type="text"
               name="image"
@@ -152,9 +154,9 @@ export const CreateRecipe = (props) => {
               value={input.image}
               onChange={(e) => handleChange(e)}
             />
-            {errorInput.image ? <span>{errorInput.image}</span> : <span></span>}
 
             <label>Pasos de preparacion:</label>
+            {errorInput.steps ? <span>{errorInput.steps}</span> : <span></span>}
             <textarea
               type="text"
               name="steps"
@@ -162,26 +164,7 @@ export const CreateRecipe = (props) => {
               value={input.steps}
               onChange={(e) => handleChange(e)}
             />
-            {errorInput.steps ? <span>{errorInput.steps}</span> : <span></span>}
 
-            {!Object.entries(errorInput).length ? (
-              <button  type="submit">
-                Create Recipe
-              </button>
-            ) : (
-              <div>
-                <button  type="submit" disabled>
-                  Create Recipe
-                </button>
-                <span >
-                  {" "}
-                  Incomplete required fields
-                </span>
-              </div>
-            )}
-          </div>
-
-          <div >
             <div >
               <label>Types of Diets:</label>
               {dietas?.map((diet) => {
@@ -206,6 +189,24 @@ export const CreateRecipe = (props) => {
                 <span></span>
               )}
             </div>
+            {!Object.entries(errorInput).length ? (
+              <button  type="submit">
+                Create Recipe
+              </button>
+            ) : (
+              <div>
+                <button  type="submit" disabled>
+                  Create Recipe
+                </button>
+                <span >
+                  {" "}
+                  Incomplete required fields
+                </span>
+              </div>
+            )}
+          </div>
+
+          <div >
           </div>
         </form>
       </div>
@@ -213,10 +214,4 @@ export const CreateRecipe = (props) => {
   );
 };
 
-// {
-//   input.summary.length ? (
-//     errorInput.summary && <p>{errorInput.summary}</p>
-//   ) : (
-//     <p></p>
-//   );
-// }
+

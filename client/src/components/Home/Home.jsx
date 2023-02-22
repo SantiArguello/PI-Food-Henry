@@ -1,7 +1,7 @@
 import React from "react";
 import { Recipe } from "../Recipe/Recipe";
 import { Header } from "../Header/Header.jsx";
-import { SideBar } from "../Side/SideBar";
+import { FilterBar } from "../FilterNav/FilterBar";
 import { Nav } from "../Nav/Nav";
 import s from "./home.module.css"
 
@@ -13,7 +13,7 @@ export const Home = (props) => {
         <Header />
         <div className={s.mainHeader}>
         <Nav />
-        <SideBar />
+        <FilterBar />
         </div>
         <div >
           <Recipe />

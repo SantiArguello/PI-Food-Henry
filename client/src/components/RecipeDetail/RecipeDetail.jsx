@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import * as actions from "../../redux/actions";
 import { Link } from "react-router-dom";
-
+import s from "./recipeDetail.module.css";
 
 //import { useHistory } from "react-router-dom";
 import { Loading } from "../Empty/Loading";
@@ -37,8 +37,6 @@ export const RecipeDetail = () => {
     dispatch(actions.getDiets());
   }, [dispatch, id]);
 
-  
-
   const handleHome = () => {
     dispatch(actions.getRecipes());
     dispatch(actions.ClearId());
@@ -47,51 +45,46 @@ export const RecipeDetail = () => {
   console.log(recipeId);
   // recipeId.name;
   return (
-    <div >
-      <div >
-        <div >
+    <div className={s.containerDetail}>
+      <div className={s.mainDetail} >
+        <div className={s.backButton}>
           <Link to="/home">
-            <button onClick={() => handleHome()}>
-              Back to Home
-            </button>
+            <button onClick={() => handleHome()}>Back to Home</button>
           </Link>
         </div>
 
         {recipeId.name ? (
-          <div >
-            <h1 >{recipeId.name}</h1>
-            <div >
+          <div>
+            <h1 className={s.titleDetail}>{recipeId.name}</h1>
+
+            <div className={s.healthScore}>
               <>
                 <h4>Health Score</h4>
-                <h3 >{recipeId.healthScore}</h3>
+                <h3>{recipeId.healthScore}</h3>
               </>
-
-              <br />
             </div>
-            <div >
+
+            <div className={s.summary}>
               <div>
                 <h4>Summary</h4>
 
                 <div
-                  
                   dangerouslySetInnerHTML={{ __html: htmlWithoutLinks }}
                 ></div>
               </div>
-              <img
-                
-                src={recipeId.image}
-                alt={recipeId.name}
-              />
+
+              <img src={recipeId.image} alt={recipeId.name} />
             </div>
-            <div >
+
+            <div className={s.diets}>
               <h4>Diets</h4>
+
               {recipeId.diets?.map((ele, index) => (
-                <h3  key={index}>
-                  {ele}
-                </h3>
+                <h3 key={index}>{ele}</h3>
               ))}
             </div>
-            <div >
+
+            <div className={s.steps}>
               {recipeId.steps ? <h4>Steps</h4> : <br />}
 
               <div>

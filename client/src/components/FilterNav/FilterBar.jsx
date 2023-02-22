@@ -5,7 +5,7 @@ import * as actions from "../../redux/actions";
 import { useState, useEffect } from "react";
 import s from "./filter.module.css"
 
-export const SideBar = (props) => {
+export const FilterBar = (props) => {
   // Se define una variable de estado para almacenar las dietas seleccionadas
   const [seleccionadas, setSeleccionadas] = useState([]);
 

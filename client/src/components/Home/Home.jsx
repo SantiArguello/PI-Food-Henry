@@ -12,11 +12,12 @@ export const Home = (props) => {
       <div className={s.homeConteiner} >
         <Header />
         <div className={s.mainHeader}>
-        <Nav />
-        <FilterBar />
+         
+        <Nav />  {/* este componente ordena */}
+        <FilterBar />{/* este componente filtra */}
         </div>
         <div >
-          <Recipe />
+          <Recipe /> {/* este componente muestra las recetas paginadas */}
         </div>
       </div>
       </div>

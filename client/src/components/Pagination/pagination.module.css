@@ -1,4 +1,4 @@
-/* Estilos para el contenedor principal */
+
 .container {
   display: flex;
   justify-content: center;
@@ -7,7 +7,7 @@
   align-items: center;
 }
 
-/* Estilos para los botones de paginación */
+
 .pageButton {
   font-size: 1.2rem;
   color: #fff;
@@ -29,4 +29,8 @@
   font-size: 1.2rem;
   margin: 0 1rem;
   color: white;
+}
+button.pageButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }

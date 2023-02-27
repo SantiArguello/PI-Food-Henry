@@ -60,6 +60,13 @@
   .formContainer button[type="submit"]:hover {
     background-color: #388e3c;
   }
+  .formContainer button[type="submit"]:disabled {
+    background-color: #4caf4f49;
+    cursor: not-allowed;
+  }
+  .formContainer button[type="submit"]:not(:disabled) {
+    background-color: #4CAF50;
+  }
   
   .formContainer span {
     color: red;

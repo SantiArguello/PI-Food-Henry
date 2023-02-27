@@ -13,6 +13,7 @@ export const CreateRecipe = (props) => {
   const dispatch = useDispatch();
   const recipes = useSelector((state) => state.recipes);
   const dietas = useSelector((state) => state.dietas);
+  const [habilitado, setHabilitado] = useState(false);
   const history = useHistory();
 
   const [input, setInput] = useState({
@@ -195,7 +196,7 @@ export const CreateRecipe = (props) => {
               </button>
             ) : (
               <div>
-                <button  type="submit" disabled>
+                <button  type="submit" disabled={!habilitado}>
                   Create Recipe
                 </button>
                 <span >

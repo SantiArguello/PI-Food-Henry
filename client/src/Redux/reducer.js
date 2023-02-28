@@ -10,6 +10,7 @@ export const CLEARID = "CLEARID";
 export const SET_PAGES = "SET_PAGES";
 export const BURGER = "BURGER";
 export const FILTER_CREATED = "FILTER_CREATED";
+export const CLEAN_ID = "CLEAN_ID"
 
 const initialState = {
   recipes: [true],
@@ -107,6 +108,11 @@ function rootReducer(state = initialState, action) {
         ...state,
         recipeId: action.payload,
       };
+    case CLEAN_ID:
+      return {
+        ...state,
+        recipeId:[]
+      }
    
     default:
       return { ...state };

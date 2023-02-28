@@ -37,11 +37,6 @@ export const Recipe = (props) => {
 
   return (
     <div >
-      {/* estado local llamado loading, que se usa para determinar si se debe
-      mostrar un mensaje de carga mientras se espera a que se obtengan las
-      recetas. Si loading es true, el componente muestra un componente Loading;
-      de lo contrario, si showRecipes es un array vacío, muestra un componente
-    `Empty */}
       {!loading ? (
         !recipes.length ? (
           <Empty />
@@ -65,10 +60,23 @@ export const Recipe = (props) => {
           )}
           {totalPages >= 2 && Array.isArray(showRecipes) && (
             <Pagination totalPages={totalPages} />
-      
-            // renderiza Pagination si el número total de páginas es mayor o igual a 2 y showRecipes es un array válido. El componente Pagination se encarga de mostrar la barra de paginación que permite al usuario navegar entre diferentes páginas de la lista.
           )}
     </div>
   );
 };
-// };
+
+// const [loading, setLoading] = useState(true);
+
+//     useEffect(() => {
+//         dispatch(getDetail(id)).then(() => setLoading(false));
+//         return () => {
+//             setLoading(true);
+//             dispatch(cleanID());
+//         };
+//     }, [id]);
+
+// return ( 
+// <div>
+// { loading ? (<Loader /> ) : (<div>.....<div>)
+// </div>
+// )

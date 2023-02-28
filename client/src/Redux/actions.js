@@ -11,8 +11,14 @@ import {
   CLEARID,
   SET_PAGES,
   FILTER_CREATED,
- 
+  CLEAN_ID
 } from "./reducer";
+
+export const cleanId = () => {
+  return {
+    type: CLEAN_ID
+  }
+}
 
 export const getRecipes = () => {
   return async (dispatch) => {
